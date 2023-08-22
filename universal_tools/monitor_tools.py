@@ -20,10 +20,7 @@ import time
 import requests
 
 from universal_tools import MONITOR_TOKEN, MONITOR_SECERT
-
-
-# from utils import MONITOR_TOKEN, MONITOR_SECERT
-# from utils.log_tools import LoggerTool
+from universal_tools.log_tools import LoggerTool
 
 
 class DingTalkBot:

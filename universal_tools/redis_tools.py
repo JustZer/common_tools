@@ -17,7 +17,7 @@ import json
 
 
 class RedisScanner:
-    def __init__(self, host, port, password):
+    def __init__(self, host, port, password=None):
         self.r = redis.StrictRedis(host=host, port=port, password=password, decode_responses=False)
         self.memory_dict = defaultdict(lambda: defaultdict(float))
 
@@ -75,6 +75,6 @@ class RedisScanner:
 
 
 if __name__ == "__main__":
-    scanner = RedisScanner(host="localhost", port=6379, password="")
+    scanner = RedisScanner(host="localhost", port=6379)
     json_output = scanner.scan_redis()
     print(json_output)

@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+// 一个用于响应的示例消息
+message Response {
+    // 结果代码
+    // 0 表示成功，其他值表示错误代码
+    int32 result_code = 1;
+
+    // 消息内容
+    // 可以包含一些附加信息，如错误描述等
+    string message = 2;
+
+    // 整数列表
+    // 用于存储一组整数值
+    repeated int32 int_list = 3;
+
+    // 字符串列表
+    // 用于存储一组字符串值
+    repeated string string_list = 4;
+
+    // 浮点数
+    // 用于存储单精度浮点数
+    float float_number = 5;
+
+    // 双精度浮点数
+    // 用于存储双精度浮点数
+    double double_number = 6;
+
+    // 布尔值
+    // 用于表示真或假
+    bool is_success = 7;
+
+    // 嵌套消息
+    // 包含嵌套的消息结构
+    NestedMessage nested_message = 8;
+
+    // 重复的嵌套消息
+    // 包含一组嵌套的消息结构
+    repeated NestedMessage repeated_nested_message = 9;
+
+    // 字符串映射
+    // 用于表示键值对映射关系的字符串映射
+    map<string, string> string_map = 10;
+
+    // 枚举类型
+    // 用于表示一组预定义的选项
+    EnumType enum_field = 11;
+}
+
+// 嵌套消息类型
+message NestedMessage {
+    // 嵌套的整数值
+    // 用于表示嵌套消息中的整数字段
+    int32 nested_int = 1;
+
+    // 嵌套的字符串值
+    // 用于表示嵌套消息中的字符串字段
+    string nested_string = 2;
+}
+
+// 枚举类型
+enum EnumType {
+    // 未知选项
+    UNKNOWN = 0;
+    // 选项 A
+    OPTION_A = 1;
+    // 选项 B
+    OPTION_B = 2;
+    // 选项 C
+    OPTION_C = 3;
+}

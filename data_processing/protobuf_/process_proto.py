@@ -11,6 +11,8 @@
 --------------------       --------        -----------
 2023/10/10 9:57            1.0             Zhang ZiXu
 """
+import json
+import struct
 from typing import Dict
 
 import zs_protobuf
@@ -176,6 +178,7 @@ class ParseProto(object):
                 ordinary = ordinary + 1
             else:
                 return False
+
         return True
 
     @staticmethod
@@ -422,13 +425,16 @@ class ParseProto(object):
 
 
 if __name__ == '__main__':
-
-    file_path = r"C:\Users\JustZzer\Desktop\getPbCompressAd2-0"
-    # dict = ParseProto.parse_proto(None, file_path)
-    # print(dict)
+    messages = {}
+    file_path = r"C:\Users\JustZzer\Desktop\getPbCompressAd0-0"
+    # ParseProto.parse_proto(None, file_path, messages)
+    # print(messages)
     # ParseProto.pxprint(dict)
 
-    data, mess_data = zs_protobuf.decode_message(open(file_path, "rb").read())
-    print(data)
-    print("= = =" * 100)
-    print(mess_data)
+    file_content = open(file_path, "rb").read()
+    print(file_content)
+
+    data, mess_data = zs_protobuf.decode_message(file_content)
+    print(json.dumps(data))
+    print("= = =" * 10)
+    print(json.dumps(mess_data))

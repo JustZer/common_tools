@@ -42,5 +42,5 @@ def _base64(input_string, model="encode", encodeing="utf-8"):
 
 
 if __name__ == '__main__':
-    d = "eJoEFIhnAceJnFv2eSzGAg8b4eqn33knlSSQSyOWguZ68OGl13xU1n4RA6Q2gZNJLBSpIT5D1mTi8hDc7Ca1EFjXpOtTYo0NC/6EU88FLh4LjvxdzDqE3yiaqBs2c0IdQr0u2U8gFXuzYGpI/G6Ur+EIUptdskyvwahvcrumc8Y="
-    print(_base64(d, "decode"))
+    d = "ZR1Yby0UtCAy37llidpPqyKUWiZr+kD1YWcBsvWG5n6X+mmNmY+sIklXKyRxU1jzFQs4LcYw6coix4ngSXHyBCftBoWAltl1KYYMRFNtHrEoBN0+wInM95hRvH0U86JlG/prA/OI7yeFb+VgdsYEtiA/45fpmT1N9ky/rtd4ZtGFU/gcBXX7b7LzmsjL4tZfmfGzFsv+/wFih6gPOtWdhhKGkPEJTsneezFea/TxJlByUU/vsiJr33hApsSRW+XXs5WiI1gqWb21tYmFkRrUwIBsxfps47jaPBXuq1yA/bB5PoY6BMuH+2QqeecBhcNaAUfLQTfnwlSG2I1uDsvPwDhvHnyf1YGAT4wViHcNDkM62wH20GTjdOw5wC3Tpvh2RWBObj9/OvixME+KOC1yTtS9yoUmCl1Ho1a/KUZ/bV0EMldD7ubgu53rB25nnBCYYOrkpqDfyitcaCp2iIaLZZvOmdZURZqiDmJf8tYOhDi1vU/5SMLy7l4LJlbRP7SXYf4IZvt4z5TCqlIdsbKD6uskIl5ukY1FHeHsRQMD72CpnW7BbE9JfS1luJHeM9XDvHdm6JUOTI0peCTu9phLeM/9/a6nVmy651ZUbLu/Z7A34nTWKTs42T9OnIiSnqrgtm32EMZUIhPvmJRJHx6aKemVd74YGhYIKz5yTu/XXUUN8crSmJGHCgq/h4OYRDqkKRvx5pjHNWyNr4Ec6g2b16VvXFR5oS6UarfsC5lEkuSkmsTNQKjE16bCi7AYSF6mRE9ARVwemiaMw0+G7ZZz0y64K449kwMHDRo1dkK/75OZG6qQI3Y0+Wm/w+3pWOfWYf2UxEhtJfZEzKbdT/hzp1WFcDeOL1nBrNsh2vZ5cU4="
+    print(_base64(d, "encode"))

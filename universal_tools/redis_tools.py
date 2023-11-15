@@ -75,6 +75,14 @@ class RedisScanner:
 
 
 if __name__ == "__main__":
-    scanner = RedisScanner(host="localhost", port=6379)
+    test = False
+    if test:
+        host = "localhost"
+        port = 6379
+    else:
+        host = "172.27.91.57"
+        port = 8090
+
+    scanner = RedisScanner(host=host, port=port)
     json_output = scanner.scan_redis()
     print(json_output)

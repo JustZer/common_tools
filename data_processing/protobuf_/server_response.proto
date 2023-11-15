@@ -16,6 +16,7 @@ message Response {
 
     // 字符串列表
     // 用于存储一组字符串值
+    // repeated 存储数组,
     repeated string string_list = 4;
 
     // 浮点数

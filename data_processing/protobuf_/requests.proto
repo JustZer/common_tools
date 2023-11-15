@@ -3,11 +3,11 @@ syntax = "proto3";
 
 message TestRequest {
     int32 field1 = 1;
-    string field2 = 2;
+    optional string field2 = 2;
     repeated int32 field3 = 3;
     SubRequestfield8 field8 = 8;
 }
 
 message SubRequestfield8 {
-    int32 field1 = 1;
+    optional int32 field1 = 1;
 }

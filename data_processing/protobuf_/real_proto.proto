@@ -1,0 +1,80 @@
+syntax = "proto3";
+message Start {
+
+    message Filed1 {
+        string filed1l1 = 1;
+        int32 filed1l2 = 2;
+        int32 filed1l3 = 3;
+        int32 filed1l4 = 4;
+        string filed1l5 = 5;
+        string filed1l6 = 6;
+        int32 filed1l7 = 7;
+
+    }
+    Filed1 filed1 = 1;
+
+    message Filed2 {
+        string filed2l1 = 1;
+        int32 filed2l2 = 2;
+        int32 filed2l3 = 3;
+        int32 filed2l4 = 4;
+        string filed2l5 = 5;
+        string filed2l6 = 6;
+        string filed2l7 = 7;
+        string filed2l8 = 8;
+        int32 filed2l9 = 9;
+        string filed2l10 = 10;
+        string filed2l12 = 12;
+        string filed2l13 = 13;
+        string filed2l14 = 14;
+        string filed2l15 = 15;
+        string filed2l16 = 16;
+        string filed2l17 = 17;
+        string filed2l19 = 19;
+        string filed2l20 = 20;
+        string filed2l21 = 21;
+        string filed2l22 = 22;
+        string filed2l23 = 23;
+        string filed2l24 = 24;
+        string filed2l25 = 25;
+        string filed2l26 = 26;
+        string filed2l28 = 28;
+        string filed2l29 = 29;
+        int32 filed2l31 = 31;
+        int32 filed2l32 = 32;
+        string filed2l33 = 33;
+        int32 filed2l34 = 34;
+        int32 filed2l35 = 35;
+        int32 filed2l36 = 36;
+        string filed2l37 = 37;
+        string filed2l38 = 38;
+
+    }
+    Filed2 filed2 = 2;
+    int64 filed3 = 3;
+    int32 filed8 = 8;
+    string filed9 = 9;
+    string filed10 = 10;
+    string filed11 = 11;
+
+    message Filed12 {
+        int64 filed12l1 = 1;
+        int32 filed12l2 = 2;
+        int32 filed12l18 = 18;
+        int32 filed12l20 = 20;
+        int32 filed12l21 = 21;
+        string filed12l26 = 26;
+        int32 filed12l28 = 28;
+        int32 filed12l43 = 43;
+        string filed12l44 = 44;
+
+    }
+    Filed12 filed12 = 12;
+    string filed13 = 13;
+    repeated string filed14 = 14;
+    repeated string filed16 = 16;
+    string filed17 = 17;
+    int64 filed18 = 18;
+
+}
+        

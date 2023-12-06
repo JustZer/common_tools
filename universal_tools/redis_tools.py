@@ -37,7 +37,8 @@ class RedisScanner:
         return f"{size} {size_unit}"
 
     def scan_redis(self):
-        keys = self.r.scan_iter()
+        keys = self.r.keys()
+        print(f"共有 {len(keys)} 条.")
         output = []
         for key in keys:
             key_type = self.r.type(key)
@@ -74,6 +75,72 @@ class RedisScanner:
         return json.dumps(output)
 
 
+import hashlib
+import redis
+
+
+class RedisBloomFilter:
+    """基于 Redis 的布隆过滤器类。"""
+
+    def __init__(self, redis_host, redis_port, key, size, hash_count):
+        """
+        初始化基于 Redis 的布隆过滤器。
+
+        Args:
+            redis_host (str): Redis 服务器地址。
+            redis_port (int): Redis 服务器端口。
+            key (str): Redis 中用于存储布隆过滤器的键。
+            size (int): 位数组的大小。
+            hash_count (int): 哈希函数的数量。
+        """
+        self.redis = redis.StrictRedis(host=redis_host, port=redis_port, db=0)
+        self.key = key
+        self.size = size
+        self.hash_count = hash_count
+
+    def add(self, item):
+        """
+        向布隆过滤器中添加元素。
+
+        Args:
+            item (str): 要添加的元素。
+        """
+        for i in range(self.hash_count):
+            index = self.get_hash(item, i) % self.size
+            self.redis.setbit(self.key, index, 1)
+
+    def contains(self, item):
+        """
+        检查元素是否可能在布隆过滤器中。
+
+        Args:
+            item (str): 要检查的元素。
+
+        Returns:
+            bool: 如果元素可能存在则为True，否则为False。
+        """
+        for i in range(self.hash_count):
+            index = self.get_hash(item, i) % self.size
+            if not self.redis.getbit(self.key, index):
+                return False
+        return True
+
+    def get_hash(self, item, i):
+        """
+        使用哈希函数生成哈希值。
+
+        Args:
+            item (str): 要哈希的元素。
+            i (int): 哈希函数的索引。
+
+        Returns:
+            int: 哈希值。
+        """
+        hash_func = hashlib.sha256
+        return int(hash_func((item + str(i)).encode()).hexdigest(), 16)
+
+
+
 if __name__ == "__main__":
     test = False
     if test:
@@ -84,5 +151,11 @@ if __name__ == "__main__":
         port = 8090
 
     scanner = RedisScanner(host=host, port=port)
-    json_output = scanner.scan_redis()
-    print(json_output)
+    # json_output = scanner.scan_redis()
+    # print(json_output)
+
+    # 使用示例（请根据您的 Redis 配置调整参数）
+    bloom = RedisBloomFilter('localhost', 6379, 'my_bloom_filter', 1000, 10)
+    bloom.add('apple')
+    print(bloom.contains('apple'))  # 输出: True
+    print(bloom.contains('banana'))  # 输出: False

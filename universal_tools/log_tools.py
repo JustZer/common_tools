@@ -9,89 +9,105 @@
 @Desc     :  
 @Last Modify Time          @Version        @Author
 --------------------       --------        -----------
-2023/8/22 10:25            1.0             Zhang ZiXu
+2023/8/22 10:25            1.1             Zhang ZiXu
 """
+import datetime
 import logging
 import os
 from logging.handlers import RotatingFileHandler
-import configparser
+
+from universal_tools.func_tools import ThreadSafeSingleton
 
 
-class LoggerTool:
-    script_gen_directory = None
-    script_logs_directory = None
+@ThreadSafeSingleton
+class LoggerTool(logging.Logger):
+    """
+    自定义的日志记录器，继承自 logging.Logger。
+    通过读取配置文件和创建文件和控制台处理器，实现日志的记录。
+    使用单例模式以确保整个应用中只有一个日志记录器实例。
+    """
+    log_max_size = None
+    log_backup_count = None
 
-    def __init__(self, logger_name, config_file='../configs/logger_ini/base_logger_config.ini'):
-        self.logger_name = logger_name
-        self.config = configparser.ConfigParser()
-        self.config.read(config_file)
-
-        # 日志大小不设置就默认 5M
-        self.log_max_size = int(self.config.get(logger_name, 'log_max_size') or 1048576)
-        # 日志数量默认 1 个
-        self.log_backup_count = int(self.config.get(logger_name, 'log_backup_count') or 1)
-
-        self._init_save_path()
-
-        self.logger = self._init_logger()
-
-    def _init_logger(self):
-        logger = logging.getLogger(__name__)
-        logger.setLevel(logging.DEBUG)
-
-        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-
-        rotating_handler = RotatingFileHandler(
-            self.script_logs_directory, maxBytes=self.log_max_size, backupCount=self.log_backup_count
-        )
-        rotating_handler.setFormatter(formatter)
-
-        logger.addHandler(rotating_handler)
-
-        return logger
-
-    def log(self, message, level=logging.INFO):
-        if level == logging.DEBUG:
-            self.logger.debug(message)
-        elif level == logging.INFO:
-            self.logger.info(message)
-        elif level == logging.WARNING:
-            self.logger.warning(message)
-        elif level == logging.ERROR:
-            self.logger.error(message)
-        elif level == logging.CRITICAL:
-            self.logger.critical(message)
-        else:
-            self.logger.log(level, message)
-
-    def _init_save_path(self):
+    def __init__(self, logger_name, **kwargs):
         """
-        初始化存储目录, 作者认为日志细化对待后续的问题排查以及优化更加油耗，所以明确输出、明确分级
-        整体存储目录结构如下
-        项目根目录
-            - logs (日志根目录)
-                - {logger_name} (脚本文件日志目录)
-                    - {logger_name}.log (脚本日志)
-                    - {logger_name}.log2 (脚本日志2)
-                    - ...
-        :return: 
+        初始化日志记录器。
+
+        Args:
+            logger_name (str): 日志记录器的名称。
         """
-        script_path = os.path.abspath(__file__)
-        self.script_gen_directory = os.path.dirname(os.path.dirname(script_path))
-        # 初始化项目根目录
-        if not os.path.exists(os.path.join(self.script_gen_directory, "logs")):
-            os.mkdir(os.path.join(self.script_gen_directory, "logs"))
-        # logs_directory 是 logs 根目录
-        logs_directory = os.path.join(self.script_gen_directory, "logs")
-        # 初始化脚本 Log 输出目录
-        if not os.path.exists(os.path.join(logs_directory, self.logger_name)):
-            os.mkdir(os.path.join(logs_directory, self.logger_name))
-        # script_logs_directory 是脚本输出目录
-        script_logs_directory = os.path.join(logs_directory, self.logger_name)
-        self.script_logs_directory = os.path.join(script_logs_directory, f"{self.logger_name}.log")
+        super().__init__(logger_name, logging.DEBUG)
+        self.local_time = datetime.datetime.today().strftime("%Y-%m-%d")
+        self.formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+
+        self._init_file_configs()
+        self._init_save_path(**kwargs)
+        self._init_handlers()
+
+    def _init_file_configs(self):
+        """
+        初始化文件配置
+        Returns:
+
+        """
+        self.log_max_size = 1048576
+        self.log_backup_count = 5
+
+    def _init_save_path(self, **kwargs):
+        """
+        初始化日志文件的存储路径
+        Args:
+            kwargs:
+                save_status(bool): 是否存储在本地项目的 Logs 文件夹中
+                save_file_name(str): 日志存储文件名
+
+        Returns:
+
+        """
+        try:
+            save_file_name = str(kwargs.get("save_file_name", "logs"))
+        except Exception as e:
+            self.warning("## 日志存储文件名未设置，将使用默认文件名 logs")
+            save_file_name = "logs"
+
+        if bool(kwargs.get("save_status")) or False:
+            script_path = os.path.abspath(__file__)
+            self.script_gen_directory = os.path.dirname(os.path.dirname(script_path))
+
+            # 创建日志目录
+            if not os.path.exists(os.path.join(self.script_gen_directory, save_file_name)):
+                os.mkdir(os.path.join(self.script_gen_directory, save_file_name))
+
+            logs_directory = os.path.join(self.script_gen_directory, save_file_name)
+
+            if not os.path.exists(os.path.join(logs_directory, self.name)):
+                os.mkdir(os.path.join(logs_directory, self.name))
+
+            script_logs_directory = os.path.join(logs_directory, self.name)
+            script_logs_directory = os.path.join(script_logs_directory, f"{self.name}-{self.local_time}.log")
+
+            rotating_handler = RotatingFileHandler(
+                filename=script_logs_directory,
+                maxBytes=self.log_max_size,
+                backupCount=self.log_backup_count,
+                encoding="utf-8"
+            )
+            rotating_handler.setFormatter(self.formatter)
+            self.addHandler(rotating_handler)
+
+    def _init_handlers(self):
+        """
+        初始化日志处理器。
+        包括文件处理器和控制台处理器，用于记录日志到文件和控制台。
+        """
+
+        stream_handler = logging.StreamHandler()
+        stream_handler.setFormatter(self.formatter)
+
+        self.addHandler(stream_handler)
 
 
 if __name__ == "__main__":
-    logger_tool = LoggerTool(logger_name="Logger")
-    for i in range(10000):
-        logger_tool.log(f"This is an example log message. for {i} <<<<<<<<<<<<<<<<", level=logging.WARNING)
+    logger = LoggerTool(logger_name="Logger")
+    for i in range(100):
+        logger.info(f"This is an example log message. for {i} <<<<<<<<<<<<<<<<")

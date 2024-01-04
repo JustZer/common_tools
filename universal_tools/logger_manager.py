@@ -77,8 +77,8 @@ class LoggerUtil:
         self.logger.addHandler(stream_handler)
 
         if bool(self.config.get('SAVE_FILE', None)):
-            max_bytes = int(self.config.get('MAX_BYTES', 10485760))  # 10MB
-            backup_count = int(self.config.get('BACKUP_COUNT', 5))
+            max_bytes = int(self.config.get('MAX_BYTES', "10485760"))  # 10MB
+            backup_count = int(self.config.get('BACKUP_COUNT', "5"))
             file_handler = RotatingFileHandler(log_file, maxBytes=max_bytes, backupCount=backup_count)
             file_handler.setFormatter(formatter)
             self.logger.addHandler(file_handler)

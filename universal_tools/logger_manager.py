@@ -28,7 +28,8 @@ class LoggerUtil:
         Args:
             logger_name: 日志名称, 如配置中需要进行日志文件存储, 此参数即日志文件名称
             config_name: 配置文件名称, 默认为 DEFAULT
-            config_file: 配置文件路径
+            config_file: 配置文件路径, 如果设置了 config_file 就需要注意 config_name 是否在文件中
+            logger_level: 日志输出等级, 建议测试代码使用 DEBUG
         """
         self.logger_name = logger_name
         self.logger_level = logger_level

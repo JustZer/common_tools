@@ -74,6 +74,47 @@ def extract_keys_with_path(data, target_key, current_path=None, paths=None) -> l
     return paths
 
 
+def extract_keys_with_level(data, max_level, _current_level=1, _parent_key=''):
+    """
+    从 JSON 数据中提取指定层级的所有 key 名称。
+
+    Args:
+        data (dict 或 list): JSON 数据。
+        max_level (int): 要提取的最大层级。
+        _current_level (int): 当前处理的层级。
+        _parent_key (str): 父级 key 的路径。
+
+    Returns:
+        dict: 层级为键，key 名称列表为值的字典。
+        例如: { "1": ["xxx","xxx2"], "2": ["xxx:abc", "xx2:bcd"]...}
+    """
+    keys = {}
+    if _current_level > max_level:
+        return keys
+
+    if isinstance(data, dict):
+        for key, value in data.items():
+            new_key = f"{_parent_key}:{key}" if _parent_key else key
+            if _current_level not in keys:
+                keys[_current_level] = []
+            keys[_current_level].append(new_key)
+            child_keys = extract_keys_with_level(value, max_level, _current_level + 1, new_key)
+            for level, names in child_keys.items():
+                if level not in keys:
+                    keys[level] = []
+                keys[level].extend(names)
+    elif isinstance(data, list) and all(isinstance(item, dict) for item in data):
+        for index, item in enumerate(data):
+            new_key = f"{_parent_key}:{index}" if _parent_key else str(index)
+            child_keys = extract_keys_with_level(item, max_level, _current_level + 1, new_key)
+            for level, names in child_keys.items():
+                if level not in keys:
+                    keys[level] = []
+                keys[level].extend(names)
+
+    return keys
+
+
 if __name__ == '__main__':
     a = {
         "user_info": {
@@ -96,3 +137,4 @@ if __name__ == '__main__':
     }
     # extract_keys_with_path(a, "rpt_msg_ad_info")
     print(parse_multi_dict(a, ("user_info", "ad_info"), default=[]))
+    print(extract_keys_with_level(a, 3))

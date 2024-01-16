@@ -42,6 +42,31 @@ def parse_multi_dict(_dict, keys=(), default={}) -> dict or type:
     return data
 
 
+def _parse_multi_dict(_dict, keys=(), default=None):
+    """
+    解析嵌套字典结构，获取指定键路径的值。
+
+    Args:
+        _dict: 目标字典。
+        keys: 按层级排序的键列表。
+        default: 查找失败时的默认返回值，默认为 None。
+
+    Returns:
+        解析出的值或默认值。
+    """
+    if default is None:
+        default = {}
+
+    data = _dict
+    for key in keys:
+        # 使用 get 方法安全地获取键值
+        data = data.get(key, default)
+        if data is default:
+            break
+
+    return data
+
+
 def extract_keys_with_path(data, target_key, current_path=None, paths=None) -> list:
     """
     递归提取json中指定key的路径
@@ -136,5 +161,6 @@ if __name__ == '__main__':
         "user_type": 0
     }
     # extract_keys_with_path(a, "rpt_msg_ad_info")
-    print(parse_multi_dict(a, ("user_info", "ad_info"), default=[]))
-    print(extract_keys_with_level(a, 3))
+    # print(parse_multi_dict(a, ("user_info", "ad_info"), default=[]))
+    # print(extract_keys_with_level(a, 3))
+    print(_parse_multi_dict(a, keys=("user_info", "ad_info"), default=[]))

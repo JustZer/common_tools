@@ -74,9 +74,8 @@ def build_url(api: str, params: dict) -> str:
 
 
 if __name__ == '__main__':
-    url = ("https://jc.zhcw.com/port/client_json.php?callback=jQuery11220623738832912706_1699587391154&"
-           "transactionType=10001001&lotteryId=1&issueCount=30&endDate=&type=0&pageNum=1&pageSize=30&"
-           "tt=0.22023995540406527&_=1699587391155")
+    url = "https://www.52pojie.cn/forum-24-7.html"
     api, params = parse_url_params(url)
+    print(api, params)
 
 

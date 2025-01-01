@@ -1,2 +1,9 @@
 logs/
+# Ignore JetBrains IDE (e.g., PyCharm) project files
 .idea/
+
+# Ignore specific configuration files (if needed)
+.idea/inspectionProfiles/
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/.name

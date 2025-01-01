@@ -7,3 +7,5 @@ logs/
 .idea/workspace.xml
 .idea/tasks.xml
 .idea/.name
+
+__pycache__

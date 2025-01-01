@@ -11,16 +11,16 @@
 --------------------       --------        -----------
 2023/8/22 11:56            1.0             Zhang ZiXu
 """
-import hmac
-import hashlib
 import base64
-import logging
-import urllib.parse
+import hashlib
+import hmac
 import time
+import urllib.parse
+
 import requests
 
-from universal_tools import MONITOR_TOKEN, MONITOR_SECERT
-from universal_tools.log_tools import LoggerTool
+from libs.common_tools.universal_tools import MONITOR_TOKEN, MONITOR_SECERT
+from libs.common_tools.universal_tools.logger_manager import LoggerUtil
 
 
 class DingTalkBot:
@@ -40,7 +40,7 @@ class DingTalkBot:
             "Content-Type": "application/json",
             "Charset": "UTF-8"
         }
-        self.logger = LoggerTool(logger_name="Logger")
+        self.logger = LoggerUtil(logger_name="Logger").get_logger()
 
     def get_sign(self, secret, timestamp):
         """
@@ -93,10 +93,10 @@ class DingTalkBot:
             }
         response = requests.post(url=self.webhook_url, json=payload, headers=self.headers)
         if response.json().get("errcode") == 0:
-            self.logger.log(f"send_text发送钉钉消息成功：{response.json()}")
+            self.logger.info(f"send_text发送钉钉消息成功：{response.json()}")
             return True
         else:
-            self.logger.log(f"send_text发送钉钉消息失败：{response.text}", level=logging.WARNING)
+            self.logger.warning(f"send_text发送钉钉消息失败：{response.text}")
             return False
 
     def send_link(self, title, text, message_url, pic_url=None):
@@ -118,10 +118,10 @@ class DingTalkBot:
         }
         response = requests.post(url=self.webhook_url, json=payload, headers=self.headers)
         if response.json().get("errcode") == 0:
-            self.logger.log(f"send_link发送钉钉消息成功：{response.json()}")
+            self.logger.info(f"send_link发送钉钉消息成功：{response.json()}")
             return True
         else:
-            self.logger.log(f"send_link发送钉钉消息失败：{response.text}", level=logging.WARNING)
+            self.logger.warning(f"send_link发送钉钉消息失败：{response.text}")
             return False
 
     def send_markdown(self, title, text, mobiles=None, is_at_all=False):
@@ -164,10 +164,10 @@ class DingTalkBot:
             }
         response = requests.post(url=self.webhook_url, json=payload, headers=self.headers)
         if response.json().get("errcode") == 0:
-            self.logger.log(f"send_markdown发送钉钉消息成功：{response.json()}")
+            self.logger.info(f"send_markdown发送钉钉消息成功：{response.json()}")
             return True
         else:
-            self.logger.log(f"send_markdown发送钉钉消息失败：{response.text}", level=logging.WARNING)
+            self.logger.warning(f"send_markdown发送钉钉消息失败：{response.text}")
             return False
 
     def send_action_card_single(self, title, text, single_title, single_url, btn_orientation=0):
@@ -192,10 +192,10 @@ class DingTalkBot:
         }
         response = requests.post(url=self.webhook_url, json=payload, headers=self.headers)
         if response.json().get("errcode") == 0:
-            self.logger.log(f"send_action_card_single发送钉钉消息成功：{response.json()}")
+            self.logger.info(f"send_action_card_single发送钉钉消息成功：{response.json()}")
             return True
         else:
-            self.logger.log(f"send_action_card_single发送钉钉消息失败：{response.text}", level=logging.WARNING)
+            self.logger.warning(f"send_action_card_single发送钉钉消息失败：{response.text}")
             return False
 
     def send_action_card_split(self, title, text, btns, btn_orientation=0):
@@ -223,10 +223,10 @@ class DingTalkBot:
             })
         response = requests.post(url=self.webhook_url, json=payload, headers=self.headers)
         if response.json().get("errcode") == 0:
-            self.logger.log(f"send_action_card_split发送钉钉消息成功：{response.json()}")
+            self.logger.info(f"send_action_card_split发送钉钉消息成功：{response.json()}")
             return True
         else:
-            self.logger.log(f"send_action_card_split发送钉钉消息失败：{response.text}", level=logging.WARNING)
+            self.logger.warning(f"send_action_card_split发送钉钉消息失败：{response.text}")
             return False
 
     def send_feed_card(self, links_msg):
@@ -250,10 +250,10 @@ class DingTalkBot:
             )
         response = requests.post(url=self.webhook_url, json=payload, headers=self.headers)
         if response.json().get("errcode") == 0:
-            self.logger.log(f"send_feed_card发送钉钉消息成功：{response.json()}")
+            self.logger.info(f"send_feed_card发送钉钉消息成功：{response.json()}")
             return True
         else:
-            self.logger.log(f"send_feed_card发送钉钉消息失败：{response.text}", level=logging.WARNING)
+            self.logger.warning(f"send_feed_card发送钉钉消息失败：{response.text}")
             return False
 
 

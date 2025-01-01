@@ -133,6 +133,8 @@ class DingTalkBot:
         :param mobiles: 被艾特的用户的手机号码，格式是列表，注意需要在text里面添加@人的手机号码
         :param is_at_all: 是否艾特所有人，布尔类型，true为艾特所有人，false为不艾特
         """
+        if "\n" in text:
+            text = text.replace("  ", "").replace("\n ", "\n").replace("\n\n", "\n")
         if mobiles:
             if isinstance(mobiles, list):
                 payload = {
